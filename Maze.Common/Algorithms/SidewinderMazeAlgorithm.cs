@@ -9,21 +9,21 @@ namespace Maze.Common.Algorithms
         {
             var rand = new Random();
             
-            foreach (GridCell[] row in grid.GetRows())
+            foreach (var row in grid.GetRows())
             {
                 var run = new List<GridCell>();
-                foreach (GridCell cell in row)
+                foreach (var cell in row)
                 {
                     run.Add(cell);
 
-                    bool atEasternBoundary = cell.East == null;
-                    bool atNorthenBoundary = cell.North == null;
+                    var atEasternBoundary = cell.East == null;
+                    var atNorthenBoundary = cell.North == null;
 
-                    bool shouldCloseOut = atEasternBoundary || (!atNorthenBoundary && rand.Next(2) == 0);
+                    var shouldCloseOut = atEasternBoundary || (!atNorthenBoundary && rand.Next(2) == 0);
 
                     if (shouldCloseOut)
                     {
-                        GridCell member = run[rand.Next(run.Count)];
+                        var member = run[rand.Next(run.Count)];
                         if (member.North != null)
                         {
                             member.Link(member.North);

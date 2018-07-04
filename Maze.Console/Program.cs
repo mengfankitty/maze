@@ -3,7 +3,6 @@ using System.IO;
 using Axe.Cli.Parser;
 using Axe.Cli.Parser.Transformers;
 using Maze.GameLevelGenerator;
-using Maze.GameLevelGenerator.Components;
 using C = System.Console;
 
 namespace Maze.Console
@@ -11,10 +10,10 @@ namespace Maze.Console
     static class Program
     {
         const int InvalidArgumentCode = -2;
-        
+
         static int Main(string[] args)
         {
-            ArgsParser parser = new ArgsParserBuilder()
+            var parser = new ArgsParserBuilder()
                 .BeginDefaultCommand()
                 .AddOptionWithValue("kind", 'k', "Specify the kind of maze to render.", true)
                 .AddOptionWithValue("row", 'r', "Specify the number of rows in the maze.", true,
@@ -23,31 +22,31 @@ namespace Maze.Console
                     new IntegerTransformer())
                 .EndCommand()
                 .Build();
-            
-            ArgsParsingResult argsParsingResult = parser.Parse(args);
+
+            var argsParsingResult = parser.Parse(args);
             if (!argsParsingResult.IsSuccess)
             {
                 PrintUsage(argsParsingResult.Error.Code.ToString(), argsParsingResult.Error.Trigger);
                 return (int)argsParsingResult.Error.Code;
             }
 
-            string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "maze.png");
+            var imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "maze.png");
             return RenderPredefinedMaze(argsParsingResult, imagePath);
         }
 
         static int RenderPredefinedMaze(ArgsParsingResult argsParsingResult, string imagePath)
         {
-            string mazeKind = argsParsingResult.GetFirstOptionValue<string>("--kind");
-            int numberOfRows = argsParsingResult.GetFirstOptionValue<int>("--row");
-            int numberOfColumns = argsParsingResult.GetFirstOptionValue<int>("--column");
-            
+            var mazeKind = argsParsingResult.GetFirstOptionValue<string>("--kind");
+            var numberOfRows = argsParsingResult.GetFirstOptionValue<int>("--row");
+            var numberOfColumns = argsParsingResult.GetFirstOptionValue<int>("--column");
+
             if (numberOfRows <= 0 || numberOfColumns <= 0)
             {
                 PrintUsage("InvalidArgument", $"--row {numberOfRows} --column {numberOfColumns}");
                 return InvalidArgumentCode;
             }
 
-            using (FileStream stream = File.Create(imagePath))
+            using (var stream = File.Create(imagePath))
             {
                 return RenderPredefinedMaze(stream, mazeKind, new MazeGridSettings(numberOfRows, numberOfColumns));
             }
@@ -55,23 +54,14 @@ namespace Maze.Console
 
         static int RenderPredefinedMaze(FileStream stream, string mazeKind, MazeGridSettings mazeGridSettings)
         {
-            switch (mazeKind)
+            var writer = new WriterFactory().Build(mazeKind);
+            if (writer == null)
             {
-                case "tree": new TreeLevelWriter().Write(stream, mazeGridSettings);
-                    break;
-                case "grass": new GrassLevelWriter().Write(stream, mazeGridSettings);
-                    break;
-                case "city": new CityLevelWriter().Write(stream, mazeGridSettings);
-                    break;
-                case "town": new TownLevelWriter().Write(stream, mazeGridSettings);
-                    break;
-                case "color": new ColorLevelWriter().Write(stream, mazeGridSettings);
-                    break;
-                default: 
-                    PrintUsage("InvalidArgument", $"--kind {mazeKind}");
-                    return InvalidArgumentCode;
+                PrintUsage("InvalidArgument", $"--kind {mazeKind}");
+                return InvalidArgumentCode;
             }
 
+            writer.Write(stream, mazeGridSettings);
             return 0;
         }
 

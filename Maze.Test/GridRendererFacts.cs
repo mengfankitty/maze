@@ -63,7 +63,7 @@ namespace Maze.Test
                 {"W,NE", "W,EW", "W,NEW", "W,EW", "W,NW"}
             };
 
-            string[,] actualResult = RenderToArray(new RenderGrid(grid));
+            var actualResult = RenderToArray(new RenderGrid(grid));
             Assert.Equal(expectedRenderGrid, actualResult);
         }
 
@@ -84,7 +84,7 @@ namespace Maze.Test
                 {"W,NE", "W,EW",  "W,NEW",  "W,EW",  "W,NW"}
             };
             
-            string[,] actualResult = RenderToArray(new RenderGrid(grid));
+            var actualResult = RenderToArray(new RenderGrid(grid));
             Assert.Equal(expectedRenderGrid, actualResult);
         }
         
@@ -106,20 +106,20 @@ namespace Maze.Test
                 {"W,NE", "W,EW",  "W,EW",   "W,EW",  "W,NW"}
             };
 
-            string[,] actualResult = RenderToArray(new RenderGrid(grid));
+            var actualResult = RenderToArray(new RenderGrid(grid));
             Assert.Equal(expectedRenderGrid, actualResult);
         }
 
         static string[,] RenderToArray(RenderGrid renderGrid)
         {
             var result = new string[renderGrid.RowCount, renderGrid.ColumnCount];
-            for (int rowIndex = 0; rowIndex < renderGrid.RowCount; ++rowIndex)
+            for (var rowIndex = 0; rowIndex < renderGrid.RowCount; ++rowIndex)
             {
-                for (int columnIndex = 0; columnIndex < renderGrid.ColumnCount; ++columnIndex)
+                for (var columnIndex = 0; columnIndex < renderGrid.ColumnCount; ++columnIndex)
                 {
-                    RenderCell cell = renderGrid[rowIndex, columnIndex];
-                    char renderType = cell.RenderType.ToString().First();
-                    string direction = CreateDirectionString(cell.Direction);
+                    var cell = renderGrid[rowIndex, columnIndex];
+                    var renderType = cell.RenderType.ToString().First();
+                    var direction = CreateDirectionString(cell.Direction);
                     result[rowIndex, columnIndex] = $"{renderType},{direction}";
                 }
             }

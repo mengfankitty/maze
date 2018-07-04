@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Maze.Common.Algorithms
@@ -9,13 +8,13 @@ namespace Maze.Common.Algorithms
         public void Update(Grid grid)
         {
             var rand = new Random();
-            GridCell cell = grid.GetRandomCell();
-            int unvisited = grid.Size - 1;
+            var cell = grid.GetRandomCell();
+            var unvisited = grid.Size - 1;
 
             while (unvisited > 0)
             {
-                IList<GridCell> neighbors = cell.Neighbors;
-                GridCell neighbor = neighbors[rand.Next(neighbors.Count)];
+                var neighbors = cell.Neighbors;
+                var neighbor = neighbors[rand.Next(neighbors.Count)];
                 if (!neighbor.Links.Any())
                 {
                     cell.Link(neighbor);

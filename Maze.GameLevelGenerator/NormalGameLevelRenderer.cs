@@ -29,8 +29,8 @@ namespace Maze.GameLevelGenerator
 
         public override void Render(RenderGrid grid, Stream stream)
         {
-            int width = CalculateDimension(grid.ColumnCount);
-            int height = CalculateDimension(grid.RowCount);
+            var width = CalculateDimension(grid.ColumnCount);
+            var height = CalculateDimension(grid.RowCount);
             using (var image = new Image<Rgba32>(width, height))
             {
                 image.Mutate();
@@ -38,12 +38,12 @@ namespace Maze.GameLevelGenerator
                 {
                     var fullArea = new Rectangle(0, 0, width, height);
                     
-                    foreach (AreaRenderer backgroundRenderer in BackgroundRenderers)
+                    foreach (var backgroundRenderer in BackgroundRenderers)
                     {
                         backgroundRenderer.Render(context, fullArea);
                     }
                     
-                    foreach (RenderCell cell in grid.GetCells())
+                    foreach (var cell in grid.GetCells())
                     {
                         var cellArea = new Rectangle(
                             TranslateCoordWithMargin(cell.Column * Settings.CellSize), 
@@ -53,7 +53,7 @@ namespace Maze.GameLevelGenerator
 
                         if (cell.RenderType == RenderType.Ground)
                         {
-                            foreach (CellRenderer groundRenderer in GroundRenderers)
+                            foreach (var groundRenderer in GroundRenderers)
                             {
                                 groundRenderer.Render(context, cellArea, cell);
                             }
@@ -61,7 +61,7 @@ namespace Maze.GameLevelGenerator
 
                         if (cell.RenderType == RenderType.Wall)
                         {
-                            foreach (CellRenderer wallRenderer in WallRenderers)
+                            foreach (var wallRenderer in WallRenderers)
                             {
                                 wallRenderer.Render(context, cellArea, cell);
                             }

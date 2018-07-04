@@ -22,9 +22,9 @@ namespace Maze.Common
 
         void ConfigCells()
         {
-            foreach (GridCell[] rows in _grid)
+            foreach (var rows in _grid)
             {
-                foreach (GridCell cell in rows)
+                foreach (var cell in rows)
                 {
                     var cellRow = cell.Row;
                     var cellColumn = cell.Column;
@@ -40,10 +40,10 @@ namespace Maze.Common
         static GridCell[][] PrepareGrid(int rows, int columns)
         {
             var theGrid = new GridCell[rows][];
-            for (int rowIndex = 0; rowIndex < rows; ++rowIndex)
+            for (var rowIndex = 0; rowIndex < rows; ++rowIndex)
             {
                 var currentRow = new GridCell[columns];
-                for (int columnIndex = 0; columnIndex < columns; ++columnIndex)
+                for (var columnIndex = 0; columnIndex < columns; ++columnIndex)
                 {
                     currentRow[columnIndex] = new GridCell(rowIndex, columnIndex);
                 }
@@ -67,8 +67,8 @@ namespace Maze.Common
         public GridCell GetRandomCell()
         {
             var random = new Random();
-            int rowIndex = random.Next(RowCount);
-            int columnIndex = random.Next(_grid[rowIndex].Length);
+            var rowIndex = random.Next(RowCount);
+            var columnIndex = random.Next(_grid[rowIndex].Length);
             return this[rowIndex, columnIndex];
         }
 

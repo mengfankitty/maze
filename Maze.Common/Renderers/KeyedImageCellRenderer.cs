@@ -29,8 +29,8 @@ namespace Maze.Common.Renderers
         {
             if (!IsSupported(cell)) return;
 
-            string textureKey = GetTextureKey(cell);
-            Image<Rgba32> texture = _map[textureKey];
+            var textureKey = GetTextureKey(cell);
+            var texture = _map[textureKey];
             if (texture == null) return;
             var location = new Point(
                 (cellArea.Left + cellArea.Right) / 2,

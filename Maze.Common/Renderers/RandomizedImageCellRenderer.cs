@@ -28,7 +28,7 @@ namespace Maze.Common.Renderers
         public override void Render(IImageProcessingContext<Rgba32> context, Rectangle cellArea, RenderCell cell)
         {
             if (!IsSupported(cell)) return;
-            Image<Rgba32> texture = _textures[_random.Next(_textures.Count)];
+            var texture = _textures[_random.Next(_textures.Count)];
             var location = new Point(
                 (cellArea.Left + cellArea.Right) / 2,
                 cellArea.Bottom);

@@ -10,7 +10,7 @@ namespace Maze.Common.Algorithms
         {
             var random = new Random();
 
-            foreach (GridCell cell in grid.GetCells())
+            foreach (var cell in grid.GetCells())
             {
                 var neighbors = new List<GridCell>();
                 if (cell.North != null) { neighbors.Add(cell.North);}
@@ -18,7 +18,7 @@ namespace Maze.Common.Algorithms
 
                 if (!neighbors.Any()) continue;
 
-                int selectedIndexToLink = random.Next(neighbors.Count);
+                var selectedIndexToLink = random.Next(neighbors.Count);
                 cell.Link(neighbors[selectedIndexToLink]);
             }
         }

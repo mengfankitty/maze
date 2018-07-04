@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Maze.Common;
 using Maze.Common.Renderers;
-using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Maze.GameLevelGenerator.Components
@@ -12,7 +10,7 @@ namespace Maze.GameLevelGenerator.Components
     {
         public void Write(Stream stream, MazeGridSettings mazeSettings)
         {
-            RenderGrid renderGrid = new MazeGridFactory(mazeSettings).CreateRenderGrid();
+            var renderGrid = new MazeGridFactory(mazeSettings).CreateRenderGrid();
             var renderer = new Fake3DGameLevelRenderer(
                 new [] {new AreaColorRender(Rgba32.White)},
                 CreateRoads(),
@@ -48,9 +46,9 @@ namespace Maze.GameLevelGenerator.Components
 
         static IEnumerable<CellRenderer> CreateRoads()
         {
-            Image<Rgba32> northSouth =
+            var northSouth =
                 Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_north_south.png");
-            Image<Rgba32> eastWest =
+            var eastWest =
                 Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_east_west.png");
             yield return new DirectedCellRenderer(
                 northSouth,

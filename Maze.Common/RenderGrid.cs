@@ -39,11 +39,11 @@ namespace Maze.Common
 
         static void SetDirection(RenderCell[][] renderGrid)
         {
-            foreach (RenderCell[] rows in renderGrid)
+            foreach (var rows in renderGrid)
             {
-                foreach (RenderCell cell in rows)
+                foreach (var cell in rows)
                 {
-                    RenderType selfType = cell.RenderType;
+                    var selfType = cell.RenderType;
                     if (cell.East?.RenderType == selfType) cell.Direction |= Direction.East;
                     if (cell.West?.RenderType == selfType) cell.Direction |= Direction.West;
                     if (cell.North?.RenderType == selfType) cell.Direction |= Direction.North;
@@ -54,11 +54,11 @@ namespace Maze.Common
 
         void RemoveIsolatedConnector(RenderCell[][] renderGrid)
         {
-            for (int rowIndex = 2; rowIndex < RowCount - 1; rowIndex += 2)
+            for (var rowIndex = 2; rowIndex < RowCount - 1; rowIndex += 2)
             {
-                for (int columnIndex = 2; columnIndex < ColumnCount - 1; columnIndex += 2)
+                for (var columnIndex = 2; columnIndex < ColumnCount - 1; columnIndex += 2)
                 {
-                    RenderCell connector = renderGrid[rowIndex][columnIndex];
+                    var connector = renderGrid[rowIndex][columnIndex];
                     if (connector.Neighbors.All(n => n.RenderType != RenderType.Wall))
                     {
                         connector.RenderType = RenderType.Ground;
@@ -69,11 +69,11 @@ namespace Maze.Common
 
         static void SetCellAndLinkedPart(RenderCell[][] renderGrid, Grid grid)
         {
-            foreach (GridCell cell in grid.GetCells())
+            foreach (var cell in grid.GetCells())
             {
-                int centerRowIndex = TranslateGridIndex(cell.Row);
-                int centerColumnIndex = TranslateGridIndex(cell.Column);
-                RenderCell center = renderGrid[centerRowIndex][centerColumnIndex];
+                var centerRowIndex = TranslateGridIndex(cell.Row);
+                var centerColumnIndex = TranslateGridIndex(cell.Column);
+                var center = renderGrid[centerRowIndex][centerColumnIndex];
                 center.RenderType = RenderType.Ground;
                 renderGrid[centerRowIndex + 1][centerColumnIndex + 1].RenderType = RenderType.Wall;
                 renderGrid[centerRowIndex][centerColumnIndex + 1].RenderType =
@@ -85,7 +85,7 @@ namespace Maze.Common
 
         void SetNorthenWall(RenderCell[][] renderGrid)
         {
-            for (int columnIndex = 0; columnIndex < ColumnCount; ++columnIndex)
+            for (var columnIndex = 0; columnIndex < ColumnCount; ++columnIndex)
             {
                 renderGrid[0][columnIndex].RenderType = RenderType.Wall;
             }
@@ -93,7 +93,7 @@ namespace Maze.Common
 
         void SetWesternWall(RenderCell[][] renderGrid)
         {
-            for (int rowIndex = 0; rowIndex < RowCount; ++rowIndex)
+            for (var rowIndex = 0; rowIndex < RowCount; ++rowIndex)
             {
                 renderGrid[rowIndex][0].RenderType = RenderType.Wall;
             }
@@ -101,12 +101,12 @@ namespace Maze.Common
 
         void ConfigureNeighbors()
         {
-            foreach (RenderCell[] rows in _renderGrid)
+            foreach (var rows in _renderGrid)
             {
-                foreach (RenderCell cell in rows)
+                foreach (var cell in rows)
                 {
-                    int cellRow = cell.Row;
-                    int cellColumn = cell.Column;
+                    var cellRow = cell.Row;
+                    var cellColumn = cell.Column;
                     cell.SetNeighbors(
                         this[cellRow - 1, cellColumn],
                         this[cellRow + 1, cellColumn],
@@ -119,10 +119,10 @@ namespace Maze.Common
         RenderCell[][] AllocateGrid()
         {
             var theGrid = new RenderCell[RowCount][];
-            for (int rowIndex = 0; rowIndex < RowCount; ++rowIndex)
+            for (var rowIndex = 0; rowIndex < RowCount; ++rowIndex)
             {
                 var currentRow = new RenderCell[ColumnCount];
-                for (int columnIndex = 0; columnIndex < ColumnCount; ++columnIndex)
+                for (var columnIndex = 0; columnIndex < ColumnCount; ++columnIndex)
                 {
                     currentRow[columnIndex] = new RenderCell(rowIndex, columnIndex);
                 }
@@ -145,9 +145,9 @@ namespace Maze.Common
 
         public IEnumerable<RenderCell> GetCells()
         {
-            foreach (RenderCell[] rows in _renderGrid)
+            foreach (var rows in _renderGrid)
             {
-                foreach (RenderCell cell in rows)
+                foreach (var cell in rows)
                 {
                     yield return cell;
                 }

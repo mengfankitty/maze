@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Maze.Common;
 using Maze.Common.Renderers;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -12,7 +11,7 @@ namespace Maze.GameLevelGenerator.Components
     {
         public void Write(Stream stream, MazeGridSettings mazeSettings)
         {
-            RenderGrid renderGrid = new MazeGridFactory(mazeSettings).CreateRenderGrid();
+            var renderGrid = new MazeGridFactory(mazeSettings).CreateRenderGrid();
             var renderer = new Fake3DGameLevelRenderer(
                 CreateWhiteBackground(),
                 Array.Empty<CellRenderer>(),

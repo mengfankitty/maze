@@ -78,7 +78,7 @@ namespace Maze.Common.Renderers
 
         protected override string GetTextureKey(RenderCell cell)
         {
-            Direction cellDirection = cell.Direction;
+            var cellDirection = cell.Direction;
             var keyBuilder = new StringBuilder();
             if ((cellDirection & Direction.North) == Direction.North) keyBuilder.Append("North");
             if ((cellDirection & Direction.South) == Direction.South) keyBuilder.Append("South");

@@ -29,12 +29,12 @@ namespace Maze.Common.Renderers
         public override void Render(IImageProcessingContext<Rgba32> context, Rectangle cellArea, RenderCell cell)
         {
             if (!IsSupported(cell)) return;
-            bool shouldRenderer = _random.Next(100) <= Possibility;
+            var shouldRenderer = _random.Next(100) <= Possibility;
             if (shouldRenderer)
             {
-                Image<Rgba32> texture = _textures[_random.Next(_textures.Count)];
-                int maxX = cellArea.Width - texture.Width;
-                int maxY = cellArea.Height - texture.Height;
+                var texture = _textures[_random.Next(_textures.Count)];
+                var maxX = cellArea.Width - texture.Width;
+                var maxY = cellArea.Height - texture.Height;
                 
                 // Will not renderer if texture is too large
                 if (maxX < 0 || maxY < 0) return;

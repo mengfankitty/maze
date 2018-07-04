@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Maze.Common;
 using Maze.Common.Renderers;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 
 namespace Maze.GameLevelGenerator.Components
 {
@@ -12,7 +9,7 @@ namespace Maze.GameLevelGenerator.Components
     {
         public void Write(Stream stream, MazeGridSettings mazeSettings)
         {
-            RenderGrid renderGrid = new MazeGridFactory(mazeSettings).CreateRenderGrid();
+            var renderGrid = new MazeGridFactory(mazeSettings).CreateRenderGrid();
             var renderer = new NormalGameLevelRenderer(
                 CreateGrass(),
                 CreateAccessories(),
@@ -26,7 +23,7 @@ namespace Maze.GameLevelGenerator.Components
 
         IEnumerable<AreaRenderer> CreateGrass()
         {
-            Image<Rgba32> resource = Assembly.GetExecutingAssembly().LoadEmbeddedResource(
+            var resource = Assembly.GetExecutingAssembly().LoadEmbeddedResource(
                 "Maze.GameLevelGenerator.Textures.lovely_tree_ground.png");
             yield return new AreaTileImageRenderer(
                 resource,

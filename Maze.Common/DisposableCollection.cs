@@ -31,7 +31,7 @@ namespace Maze.Common
         
         public void Dispose()
         {
-            foreach (T item in _storage)
+            foreach (var item in _storage)
             {
                 item?.Dispose();
             }
