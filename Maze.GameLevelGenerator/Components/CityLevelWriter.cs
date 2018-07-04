@@ -8,7 +8,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Maze.GameLevelGenerator.Components
 {
-    public class CityLevelWriter
+    public class CityLevelWriter : IWriter
     {
         public void Write(Stream stream, MazeGridSettings mazeSettings)
         {
@@ -23,12 +23,12 @@ namespace Maze.GameLevelGenerator.Components
                 renderer.Render(renderGrid, stream);
             }
         }
-        
+
         IEnumerable<AreaRenderer> CreateWhiteBackground()
         {
             yield return new AreaColorRender(Rgba32.White);
         }
-        
+
         IEnumerable<CellRenderer> CreateBuildings()
         {
             yield return new RandomizedImageCellRenderer(

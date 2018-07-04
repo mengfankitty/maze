@@ -8,7 +8,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Maze.GameLevelGenerator.Components
 {
-    public class TownLevelWriter
+    public class TownLevelWriter : IWriter
     {
         public void Write(Stream stream, MazeGridSettings mazeSettings)
         {
@@ -23,7 +23,7 @@ namespace Maze.GameLevelGenerator.Components
                 renderer.Render(renderGrid, stream);
             }
         }
-        
+
         static Assembly Assembly { get; } = Assembly.GetExecutingAssembly();
 
         static IEnumerable<CellRenderer> CreateFake3DTownWall()

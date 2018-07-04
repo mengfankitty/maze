@@ -8,7 +8,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Maze.GameLevelGenerator.Components
 {
-    public class GrassLevelWriter
+    public class GrassLevelWriter : IWriter
     {
         public void Write(Stream stream, MazeGridSettings mazeSettings)
         {
@@ -38,7 +38,7 @@ namespace Maze.GameLevelGenerator.Components
             yield return CreateGrassGroundRenderer();
             yield return CreateGrassDirtRenderer();
         }
-        
+
         static CellRenderer CreateGrassGroundRenderer()
         {
             string[] resourceKeys =
@@ -55,7 +55,7 @@ namespace Maze.GameLevelGenerator.Components
                 Assembly.LoadEmbeddedResources(resourceKeys),
                 true);
         }
-        
+
         static CellRenderer CreateGrassDirtRenderer()
         {
             return new DirectedCellRenderer(
@@ -78,23 +78,23 @@ namespace Maze.GameLevelGenerator.Components
 
         IEnumerable<CellRenderer> CreateRailings()
         {
-            Image<Rgba32> east = 
+            Image<Rgba32> east =
                 Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.sm_grass_wall_east.png");
-            Image<Rgba32> eastWest = 
+            Image<Rgba32> eastWest =
                 Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.sm_grass_wall_east_west.png");
-            Image<Rgba32> north = 
+            Image<Rgba32> north =
                 Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.sm_grass_wall_north.png");
-            Image<Rgba32> northEast = 
+            Image<Rgba32> northEast =
                 Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.sm_grass_wall_north_east.png");
-            Image<Rgba32> northSouth = 
+            Image<Rgba32> northSouth =
                 Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.sm_grass_wall_north_south.png");
-            Image<Rgba32> northWest = 
+            Image<Rgba32> northWest =
                 Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.sm_grass_wall_north_west.png");
-            Image<Rgba32> south = 
+            Image<Rgba32> south =
                 Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.sm_grass_wall_south.png");
-            Image<Rgba32> southEast = 
+            Image<Rgba32> southEast =
                 Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.sm_grass_wall_south_east.png");
-            Image<Rgba32> southEastWest = 
+            Image<Rgba32> southEastWest =
                 Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.sm_grass_wall_south_east_west.png");
             Image<Rgba32> southWest =
                 Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.sm_grass_wall_south_west.png");
