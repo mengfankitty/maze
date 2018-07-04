@@ -4,6 +4,6 @@ namespace Maze.GameLevelGenerator.Components
 {
     public interface IWriter
     {
-        void Write(Stream stream, MazeGridSettings mazeSettings);
+        void Write(Stream stream, MazeGridSettings settings);
     }
 }

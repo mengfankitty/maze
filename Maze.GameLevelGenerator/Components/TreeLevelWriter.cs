@@ -1,59 +1,42 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using Maze.Common.Renderers;
 
 namespace Maze.GameLevelGenerator.Components
 {
-    public class TreeLevelWriter : IWriter
+    public class TreeLevelWriter : Writer
     {
-        public void Write(Stream stream, MazeGridSettings mazeSettings)
+        protected override IEnumerable<AreaRenderer> BackgroundRenderers => new List<AreaRenderer>
         {
-            var renderGrid = new MazeGridFactory(mazeSettings).CreateRenderGrid();
-            var renderer = new NormalGameLevelRenderer(
-                CreateGrass(),
-                CreateAccessories(),
-                CreateTrees(),
-                new GameLevelRenderSettings(78, 20));
-            using (renderer)
-            {
-                renderer.Render(renderGrid, stream);
-            }
-        }
+            new AreaTileImageRenderer(Assembly.GetExecutingAssembly()
+                    .LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.lovely_tree_ground.png"),
+                true)
+        };
 
-        IEnumerable<AreaRenderer> CreateGrass()
+        protected override IEnumerable<CellRenderer> GroundRenderers => new List<CellRenderer>
         {
-            var resource = Assembly.GetExecutingAssembly().LoadEmbeddedResource(
-                "Maze.GameLevelGenerator.Textures.lovely_tree_ground.png");
-            yield return new AreaTileImageRenderer(
-                resource,
-                true);
-        }
+            new RandomizedImageVisibilityCellRenderer(
+                Assembly.GetExecutingAssembly().LoadEmbeddedResources(new[]
+                {
+                    "Maze.GameLevelGenerator.Textures.lovely_tree_accessory_1.png",
+                    "Maze.GameLevelGenerator.Textures.lovely_tree_accessory_2.png",
+                    "Maze.GameLevelGenerator.Textures.lovely_tree_accessory_3.png"
+                }),
+                true)
+        };
 
-        static IEnumerable<CellRenderer> CreateTrees()
+        protected override IEnumerable<CellRenderer> WallRenderers => new List<CellRenderer>
         {
-            string[] resourceKeys =
-            {
-                "Maze.GameLevelGenerator.Textures.lovely_tree_wall_1.png",
-                "Maze.GameLevelGenerator.Textures.lovely_tree_wall_2.png",
-                "Maze.GameLevelGenerator.Textures.lovely_tree_wall_3.png"
-            };
-            yield return new RandomizedImageCellRenderer(
-                Assembly.GetExecutingAssembly().LoadEmbeddedResources(resourceKeys),
-                true);
-        }
+            new RandomizedImageCellRenderer(
+                Assembly.GetExecutingAssembly().LoadEmbeddedResources(new[]
+                {
+                    "Maze.GameLevelGenerator.Textures.lovely_tree_wall_1.png",
+                    "Maze.GameLevelGenerator.Textures.lovely_tree_wall_2.png",
+                    "Maze.GameLevelGenerator.Textures.lovely_tree_wall_3.png"
+                }),
+                true)
+        };
 
-        IEnumerable<CellRenderer> CreateAccessories()
-        {
-            string[] resourceKeys =
-            {
-                "Maze.GameLevelGenerator.Textures.lovely_tree_accessory_1.png",
-                "Maze.GameLevelGenerator.Textures.lovely_tree_accessory_2.png",
-                "Maze.GameLevelGenerator.Textures.lovely_tree_accessory_3.png"
-            };
-            yield return new RandomizedImageVisibilityCellRenderer(
-                Assembly.GetExecutingAssembly().LoadEmbeddedResources(resourceKeys),
-                true);
-        }
+        protected override GameLevelRenderSettings Settings => new GameLevelRenderSettings(78, 20);
     }
 }

@@ -1,38 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using Maze.Common.Renderers;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Maze.GameLevelGenerator.Components
 {
-    public class CityLevelWriter : IWriter
+    public class CityLevelWriter : Writer
     {
-        public void Write(Stream stream, MazeGridSettings mazeSettings)
+        protected override IEnumerable<AreaRenderer> BackgroundRenderers => new List<AreaRenderer>
         {
-            var renderGrid = new MazeGridFactory(mazeSettings).CreateRenderGrid();
-            var renderer = new Fake3DGameLevelRenderer(
-                CreateWhiteBackground(),
-                Array.Empty<CellRenderer>(),
-                CreateBuildings(),
-                new GameLevelRenderSettings(200, 100));
-            using (renderer)
-            {
-                renderer.Render(renderGrid, stream);
-            }
-        }
+            new AreaColorRender(Rgba32.White)
+        };
 
-        IEnumerable<AreaRenderer> CreateWhiteBackground()
-        {
-            yield return new AreaColorRender(Rgba32.White);
-        }
+        protected override IEnumerable<CellRenderer> GroundRenderers => Array.Empty<CellRenderer>();
 
-        IEnumerable<CellRenderer> CreateBuildings()
+        protected override IEnumerable<CellRenderer> WallRenderers => new List<CellRenderer>
         {
-            yield return new RandomizedImageCellRenderer(
+            new RandomizedImageCellRenderer(
                 Assembly.GetExecutingAssembly().LoadEmbeddedResources(
-                    new []
+                    new[]
                     {
                         "Maze.GameLevelGenerator.Textures.fake_3d_wall_1.png",
                         "Maze.GameLevelGenerator.Textures.fake_3d_wall_2.png",
@@ -46,7 +33,9 @@ namespace Maze.GameLevelGenerator.Components
                         "Maze.GameLevelGenerator.Textures.fake_3d_wall_10.png",
                         "Maze.GameLevelGenerator.Textures.fake_3d_wall_11.png"
                     }),
-                true);
-        }
+                true)
+        };
+
+        protected override GameLevelRenderSettings Settings => new GameLevelRenderSettings(200, 100);
     }
 }

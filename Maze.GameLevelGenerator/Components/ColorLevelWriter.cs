@@ -1,24 +1,24 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Maze.Common.Renderers;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Maze.GameLevelGenerator.Components
 {
-    public class ColorLevelWriter : IWriter
+    public class ColorLevelWriter : Writer
     {
-        public void Write(Stream stream, MazeGridSettings mazeSettings)
+        protected override IEnumerable<AreaRenderer> BackgroundRenderers => new[]
         {
-            var renderGrid = new MazeGridFactory(mazeSettings).CreateRenderGrid();
-            var renderer = new NormalGameLevelRenderer(
-                new [] {(AreaRenderer) new AreaColorRender(Rgba32.Black)},
-                Enumerable.Empty<CellRenderer>(),
-                new [] {(CellRenderer) new CellColorRender(Rgba32.LightSkyBlue)},
-                new GameLevelRenderSettings(4, 10));
-            using (renderer)
-            {
-                renderer.Render(renderGrid, stream);
-            }
-        }
+            (AreaRenderer) new AreaColorRender(Rgba32.Black)
+        };
+
+        protected override IEnumerable<CellRenderer> GroundRenderers => Enumerable.Empty<CellRenderer>();
+
+        protected override IEnumerable<CellRenderer> WallRenderers => new []
+        {
+            (CellRenderer) new CellColorRender(Rgba32.LightSkyBlue)
+        };
+
+        protected override GameLevelRenderSettings Settings => new GameLevelRenderSettings(4, 10);
     }
 }

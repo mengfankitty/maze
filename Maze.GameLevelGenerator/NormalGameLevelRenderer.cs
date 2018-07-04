@@ -11,8 +11,10 @@ namespace Maze.GameLevelGenerator
 {
     public class NormalGameLevelRenderer : GameLevelRenderer
     {
-        public NormalGameLevelRenderer(IEnumerable<AreaRenderer> backgroundRenderers,
-            IEnumerable<CellRenderer> groundRenderers, IEnumerable<CellRenderer> wallRenderers,
+        public NormalGameLevelRenderer(
+            IEnumerable<AreaRenderer> backgroundRenderers,
+            IEnumerable<CellRenderer> groundRenderers,
+            IEnumerable<CellRenderer> wallRenderers,
             GameLevelRenderSettings settings) : base(backgroundRenderers, groundRenderers, wallRenderers, settings)
         {
         }
@@ -37,18 +39,18 @@ namespace Maze.GameLevelGenerator
                 image.Mutate(context =>
                 {
                     var fullArea = new Rectangle(0, 0, width, height);
-                    
+
                     foreach (var backgroundRenderer in BackgroundRenderers)
                     {
                         backgroundRenderer.Render(context, fullArea);
                     }
-                    
+
                     foreach (var cell in grid.GetCells())
                     {
                         var cellArea = new Rectangle(
-                            TranslateCoordWithMargin(cell.Column * Settings.CellSize), 
-                            TranslateCoordWithMargin(cell.Row * Settings.CellSize), 
-                            Settings.CellSize, 
+                            TranslateCoordWithMargin(cell.Column * Settings.CellSize),
+                            TranslateCoordWithMargin(cell.Row * Settings.CellSize),
+                            Settings.CellSize,
                             Settings.CellSize);
 
                         if (cell.RenderType == RenderType.Ground)
@@ -68,7 +70,7 @@ namespace Maze.GameLevelGenerator
                         }
                     }
                 });
-                
+
                 image.Save(stream, ImageFormats.Png);
             }
         }

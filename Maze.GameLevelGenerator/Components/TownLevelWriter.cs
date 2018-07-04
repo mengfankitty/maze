@@ -1,34 +1,41 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using Maze.Common.Renderers;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Maze.GameLevelGenerator.Components
 {
-    public class TownLevelWriter : IWriter
+    public class TownLevelWriter : Writer
     {
-        public void Write(Stream stream, MazeGridSettings mazeSettings)
+        protected override IEnumerable<AreaRenderer> BackgroundRenderers => new []
         {
-            var renderGrid = new MazeGridFactory(mazeSettings).CreateRenderGrid();
-            var renderer = new Fake3DGameLevelRenderer(
-                new [] {new AreaColorRender(Rgba32.White)},
-                CreateRoads(),
-                CreateFake3DTownWall(),
-                new GameLevelRenderSettings(100, 50));
-            using (renderer)
-            {
-                renderer.Render(renderGrid, stream);
-            }
-        }
+            new AreaColorRender(Rgba32.White)
+        };
 
-        static Assembly Assembly { get; } = Assembly.GetExecutingAssembly();
-
-        static IEnumerable<CellRenderer> CreateFake3DTownWall()
+        protected override IEnumerable<CellRenderer> GroundRenderers => new List<CellRenderer>
         {
-            yield return new RandomizedImageCellRenderer(
+            new DirectedCellRenderer(
+                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_north_south.png"),
+                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_north_south.png"),
+                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_east_west.png"),
+                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_east_west.png"),
+                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_north_south.png"),
+                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_north_east.png"),
+                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_north_west.png"),
+                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_south_east.png"),
+                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_south_west.png"),
+                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_east_west.png"),
+                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_north_south_east.png"),
+                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_north_south_west.png"),
+                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_north_east_west.png"),
+                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_south_east_west.png"),
+                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_all.png"))
+        };
+
+        protected override IEnumerable<CellRenderer> WallRenderers => new List<CellRenderer>
+        {
+            new RandomizedImageCellRenderer(
                 Assembly.LoadEmbeddedResources(
-                    new []
+                    new[]
                     {
                         "Maze.GameLevelGenerator.Textures.fake_3d_sm_wall_1.png",
                         "Maze.GameLevelGenerator.Textures.fake_3d_sm_wall_2.png",
@@ -41,31 +48,9 @@ namespace Maze.GameLevelGenerator.Components
                         "Maze.GameLevelGenerator.Textures.fake_3d_sm_wall_9.png",
                         "Maze.GameLevelGenerator.Textures.fake_3d_sm_wall_10.png"
                     }),
-                true);
-        }
+                true)
+        };
 
-        static IEnumerable<CellRenderer> CreateRoads()
-        {
-            var northSouth =
-                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_north_south.png");
-            var eastWest =
-                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_east_west.png");
-            yield return new DirectedCellRenderer(
-                northSouth,
-                northSouth,
-                eastWest,
-                eastWest,
-                northSouth,
-                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_north_east.png"),
-                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_north_west.png"),
-                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_south_east.png"),
-                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_south_west.png"),
-                eastWest,
-                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_north_south_east.png"),
-                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_north_south_west.png"),
-                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_north_east_west.png"),
-                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_south_east_west.png"),
-                Assembly.LoadEmbeddedResource("Maze.GameLevelGenerator.Textures.road_all.png"));
-        }
+        protected override GameLevelRenderSettings Settings => new GameLevelRenderSettings(100, 50);
     }
 }
